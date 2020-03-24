@@ -1,5 +1,6 @@
 import sys
 import serial
+import serial.tools.list_ports
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 import pyqtgraph as pg
@@ -36,6 +37,7 @@ class Window(QWidget):
         # Show
         sbtn = QPushButton('Select Port')
         sbtn.resize(btn.sizeHint())
+        sbtn.clicked.connect(self.printPorts)
 
         # TABLE
         table = QTableWidget()
@@ -91,6 +93,17 @@ class Window(QWidget):
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
+
+    def printPorts(self):
+        ports = serial.tools.list_ports.comports()
+        for p in ports:
+            # print(p)
+            print(p.device)
+        # to get data
+        s = serial.Serial('COM6', 115200)
+        while (True):
+            res = s.readline().decode('utf-8')
+            print(res)
 
     def reset(self):
         s = serial.Serial('COM6', 115200)
