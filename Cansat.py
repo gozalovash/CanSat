@@ -7,11 +7,12 @@ import pyqtgraph as pg
 
 # implement serial here somehow
 
-def reset():
-    s = serial.Serial('COM6', 115200)
-    data_to_reset = "0"
-    s.write(data_to_reset.encode('utf-8'))
-    s.close()
+def reset1():
+    # s = serial.Serial('COM6', 115200)
+    # data_to_reset = "0"
+    # s.write(data_to_reset.encode('utf-8'))
+    # s.close()
+    print(34)
 
 
 class Window(QWidget):
@@ -30,7 +31,7 @@ class Window(QWidget):
         # RESET
         btn = QPushButton('Reset')
         btn.resize(btn.sizeHint())
-        btn.clicked.connect(reset())
+        btn.clicked.connect(self.reset)
 
         # Show
         sbtn = QPushButton('Select Port')
@@ -38,12 +39,13 @@ class Window(QWidget):
 
         # TABLE
         table = QTableWidget()
-        table.setFixedSize(270, 90)
-        table.setColumnCount(4)
+        table.setFixedSize(580, 90)
+        table.setColumnCount(9)
         table.setRowCount(2)
-        table.setHorizontalHeaderLabels(["Temperature", "Speed", "Altitude", "Pressure"])
+        table.setHorizontalHeaderLabels(["Command ID", "Time", "TPS", "Battery Voltage", "Altitude", "Speed",
+                                         "Latitude", "Longitude", "Taken photos"])
         for i in range(2):
-            for j in range(4):
+            for j in range(9):
                 table.setItem(i, j, QTableWidgetItem("1"))
         table.resizeColumnsToContents()
 
@@ -89,6 +91,13 @@ class Window(QWidget):
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
+
+    def reset(self):
+        s = serial.Serial('COM6', 115200)
+        data_to_reset = "0"
+        s.write(data_to_reset.encode('utf-8'))
+        s.close()
+        print(34)
 
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Door',
